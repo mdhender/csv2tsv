@@ -24,6 +24,7 @@ package main
 import (
 	"bytes"
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -32,7 +33,17 @@ import (
 )
 
 func main() {
-	if err := run("input.csv", "output.tsv"); err != nil {
+	input := "input.csv"
+	output := "output.tsv"
+
+	flag.StringVar(&input, "i", input, fmt.Sprintf("name of input file [default is %q]", input))
+	flag.StringVar(&output, "o", output, fmt.Sprintf("name of output file [default is %q]", output))
+	flag.Parse()
+	if input == "" || output == "" {
+		log.Fatal("please specify both input and output file names")
+	}
+
+	if err := run(input, output); err != nil {
 		log.Fatal(err)
 	}
 }
